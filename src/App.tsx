@@ -46,11 +46,15 @@ import { FaceLivenessDetectorCore, AwsCredentialProvider } from '@aws-amplify/ui
  
 const credentialProvider: AwsCredentialProvider = async () => {
   // Fetch the credentials
+
+  const response = await fetch('https://5v60rttes6.execute-api.eu-central-1.amazonaws.com/phase_1/credentials'); // This should be replaced with a real call to your own backend API
+  const data = await response.json();
+    
   return {
-    accessKeyId: 'accessKeyId',
-    secretAccessKey:  'secretAccessKey',
-    session   : 'session',  // optional
-    region: 'us-east-1',
+    accessKeyId: data.body.accessKeyId,
+    secretAccessKey: data.body.secretAccessKey,
+    sessionToken   : data.body.sessionToken,  // optional
+    region: 'eu-west-1',
   };
 }
 
@@ -62,11 +66,12 @@ function /*LivenessQuickStartReact*/App() {
 
   React.useEffect(() => {
     const fetchCreateLiveness: () => Promise<void> = async () => {
-      /*
-       * This should be replaced with a real call to your own backend API
-       */
+      
+      const response = await fetch('https://pp3xmkg658.execute-api.eu-west-1.amazonaws.com/phase_1/createSession', { method: 'POST'});
+      const rekognitionSessionId = await response.json();
+      
       await new Promise((r) => setTimeout(r, 2000));
-      const mockResponse = { sessionId: 'mockSessionId' };
+      const mockResponse = { sessionId: rekognitionSessionId.body.SessionId };
       const data = mockResponse;
 
       setCreateLivenessApiData(data);
@@ -78,10 +83,16 @@ function /*LivenessQuickStartReact*/App() {
 
   const handleAnalysisComplete: () => Promise<void> = async () => {
     /*
+    
      * This should be replaced with a real call to your own backend API
      */
+    if (!createLivenessApiData) {
+      console.error('createLivenessApiData is null');
+      return;
+    }
+
     const response = await fetch(
-      `/api/get?sessionId=${createLivenessApiData.sessionId}`
+      `https://pp3xmkg658.execute-api.eu-west-1.amazonaws.com/phase_1/sessionResults?sessionId=${createLivenessApiData.sessionId}`
     );
     const data = await response.json();
 
@@ -104,15 +115,17 @@ function /*LivenessQuickStartReact*/App() {
       {loading ? (
         <Loader />
       ) : (
-        <FaceLivenessDetectorCore
-          sessionId={createLivenessApiData.sessionId}
-          region="us-east-1"
-          onAnalysisComplete={handleAnalysisComplete}
-          onError={(error) => {
-            console.error(error);
-          }}
-          config={{ credentialProvider }}
-        />
+        createLivenessApiData && (
+          <FaceLivenessDetectorCore
+            sessionId={createLivenessApiData.sessionId}
+            region="eu-west-1"
+            onAnalysisComplete={handleAnalysisComplete}
+            onError={(error) => {
+              console.error(error);
+            }}
+            config={{ credentialProvider }}
+          />
+        )
       )}
       
     </ThemeProvider>
