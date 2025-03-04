@@ -27,3 +27,6 @@ dist-ssr
 .amplify
 amplify_outputs*
 amplifyconfiguration*
+
+# Backup file
+vite.config - backup.ts
