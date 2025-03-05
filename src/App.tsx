@@ -43,7 +43,10 @@ import React from 'react';
 import { Loader, ThemeProvider } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { FaceLivenessDetectorCore, AwsCredentialProvider } from '@aws-amplify/ui-react-liveness';
- 
+
+import { ComponentStateType } from './main.tsx';
+import { useComponentState, useStateManager } from './ComponentContext';
+
 const credentialProvider: AwsCredentialProvider = async () => {
   // Fetch the credentials
 
@@ -63,6 +66,14 @@ function /*LivenessQuickStartReact*/App() {
   const [createLivenessApiData, setCreateLivenessApiData] = React.useState<{
     sessionId: string;
   } | null>(null);
+
+  // 01 - get an instance of StateManager to get
+  // an apportunity to update state 
+  // via stateManager.updateState method
+  const stateManager = useStateManager<ComponentStateType>();
+  
+  // 02 - extract the current state
+  const state = useComponentState<ComponentStateType>();
 
   React.useEffect(() => {
     const fetchCreateLiveness: () => Promise<void> = async () => {
@@ -105,8 +116,10 @@ function /*LivenessQuickStartReact*/App() {
      */
     if (data.isLive) {
       console.log('User is live');
+      stateManager.updateState({ value: 'User is live' });
     } else {
       console.log('User is not live');
+      stateManager.updateState({ value: 'User is not live' });
     }
   };
 
@@ -127,7 +140,7 @@ function /*LivenessQuickStartReact*/App() {
           />
         )
       )}
-      
+      <span>{state.value}</span>
     </ThemeProvider>
   );
 }

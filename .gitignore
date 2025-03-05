@@ -30,3 +30,6 @@ amplifyconfiguration*
 
 # Backup file
 vite.config - backup.ts
+
+# types
+types.ts
