@@ -141,7 +141,9 @@ function /*LivenessQuickStartReact*/App() {
             config={{ credentialProvider }}
           />
           </div>
+          <div>
           <span>{state.value}</span>
+          </div>
           </div>
         )
       )}
