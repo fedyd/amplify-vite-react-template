@@ -129,6 +129,7 @@ function /*LivenessQuickStartReact*/App() {
         <Loader />
       ) : (
         createLivenessApiData && (
+          <div>
           <FaceLivenessDetectorCore
             sessionId={createLivenessApiData.sessionId}
             region="eu-west-1"
@@ -138,9 +139,11 @@ function /*LivenessQuickStartReact*/App() {
             }}
             config={{ credentialProvider }}
           />
+          <span>{state.value}</span>
+          </div>
         )
       )}
-      <span>{state.value}</span>
+      
     </ThemeProvider>
   );
 }
