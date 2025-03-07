@@ -74,11 +74,12 @@ function /*LivenessQuickStartReact*/App() {
   
   // 02 - extract the current state
   const state = useComponentState<ComponentStateType>();
+  const state_2 = useComponentState<ComponentStateType>();
 
   React.useEffect(() => {
     const fetchCreateLiveness: () => Promise<void> = async () => {
       
-      const response = await fetch('https://pp3xmkg658.execute-api.eu-west-1.amazonaws.com/phase_1/createSession', { method: 'POST'});
+      const response = await fetch('https://pp3xmkg658.execute-api.eu-west-1.amazonaws.com/phase_1/createSession', { method: 'POST', body: JSON.stringify({ email: state.value, token: state_2.value})});
       const rekognitionSessionId = await response.json();
       
       await new Promise((r) => setTimeout(r, 2000));
@@ -143,6 +144,7 @@ function /*LivenessQuickStartReact*/App() {
           </div>
           <div>
           <span>{state.value}</span>
+          <span>{state_2.value}</span>
           </div>
           </div>
         )
