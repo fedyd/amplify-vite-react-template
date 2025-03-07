@@ -16,7 +16,7 @@ declare global {
 }
 
 // 01 - declare an initial state that should be exposed outside
-const initState = { value: 'initial value' };
+const initState = { value: {email: "email", token: "token"} };
 export type ComponentStateType = typeof initState;
 
 

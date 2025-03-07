@@ -74,12 +74,12 @@ function /*LivenessQuickStartReact*/App() {
   
   // 02 - extract the current state
   const state = useComponentState<ComponentStateType>();
-  const state_2 = useComponentState<ComponentStateType>();
+  //const state_2 = useComponentState<ComponentStateType>();
 
   React.useEffect(() => {
     const fetchCreateLiveness: () => Promise<void> = async () => {
       
-      const response = await fetch('https://pp3xmkg658.execute-api.eu-west-1.amazonaws.com/phase_1/createSession', { method: 'POST', body: JSON.stringify({ email: state.value, token: state_2.value})});
+      const response = await fetch('https://pp3xmkg658.execute-api.eu-west-1.amazonaws.com/phase_1/createSession', { method: 'POST', body: JSON.stringify({ email: state.value.email, token: state.value.token})});
       const rekognitionSessionId = await response.json();
       
       await new Promise((r) => setTimeout(r, 2000));
@@ -117,10 +117,10 @@ function /*LivenessQuickStartReact*/App() {
      */
     if (data.isLive) {
       console.log('User is live');
-      stateManager.updateState({ value: 'User is live' });
+      stateManager.updateState({ value: {email: "user is ", token: "live"} });
     } else {
       console.log('User is not live');
-      stateManager.updateState({ value: 'User is not live' });
+      stateManager.updateState({ value: {email: "user is ", token: "not live"} });
     }
   };
 
@@ -143,8 +143,8 @@ function /*LivenessQuickStartReact*/App() {
           />
           </div>
           <div>
-          <span>{state.value}</span>
-          <span>{state_2.value}</span>
+          <span>{state.value.email}</span>
+          <span>{state.value.token}</span>
           </div>
           </div>
         )
